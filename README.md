@@ -97,9 +97,11 @@ and assembled to raw binaries. The `.asm` files are the source of truth.
 
 ```bash
 python3 -c "
-from tests import test_opcodes, test_kats
+import sys
+sys.path.insert(0, 'tests')
+import test_opcodes, test_kats, test_kats2, test_roms, test_schip, test_asm, test_tools2, test_tui
 n = 0
-for mod in (test_opcodes, test_kats):
+for mod in (test_opcodes, test_kats, test_kats2, test_roms, test_schip, test_asm, test_tools2, test_tui):
     for name in dir(mod):
         if name.startswith('test_'):
             getattr(mod, name)(); n += 1
@@ -110,3 +112,6 @@ print(n, 'passed')
 Every opcode has at least one unit test checking its side effects on
 registers, memory, or the display. `test_kats.py` runs a hand-assembled
 program to completion and asserts the exact final register and memory state.
+`test_roms.py` drives each game headlessly and checks real gameplay:
+gravity and thrust in lander, scoring in pong, death in snake. 131 checks
+in total, all passing.
